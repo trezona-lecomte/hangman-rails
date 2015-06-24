@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624015306) do
+ActiveRecord::Schema.define(version: 20150624020344) do
 
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -19,8 +19,12 @@ ActiveRecord::Schema.define(version: 20150624015306) do
   end
 
   create_table "guesses", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "game_id",    limit: 4
   end
 
+  add_index "guesses", ["game_id"], name: "index_guesses_on_game_id", using: :btree
+
+  add_foreign_key "guesses", "games"
 end
