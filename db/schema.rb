@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624022815) do
+ActiveRecord::Schema.define(version: 20150624023443) do
 
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20150624022815) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "game_id",    limit: 4
-    t.string   "letter",     limit: 1
+    t.string   "letter",     limit: 1, null: false
   end
 
   add_index "guesses", ["game_id"], name: "index_guesses_on_game_id", using: :btree
