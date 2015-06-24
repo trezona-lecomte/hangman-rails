@@ -1,0 +1,8 @@
+
+
+<% if @game.guesses.any? %>
+  <h3>Guesses (<%= @game.guesses.count %>)</h3>
+  <ol class="guesses">
+    <%= render @guesses %>
+  </ol>
+<% end %>
