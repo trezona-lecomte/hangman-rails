@@ -14,6 +14,6 @@ class Game < ActiveRecord::Base
   end
 
   def unguessed_letters
-    # TODO: zip on ALPHABET and @guesses.letters to get the diff
+    ALPHABET.reject { |l| guesses.any? { |g| g.letter == l } }
   end
 end
