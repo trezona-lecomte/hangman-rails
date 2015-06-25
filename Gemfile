@@ -15,4 +15,6 @@ group :development, :test do
   gem 'spring'
   gem 'rspec-rails', '3.3.2'
   gem 'pry-rails',   '0.3.4'
+  gem 'faker',       '1.4.3'
+  gem 'capybara',    '2.4.4'
 end
