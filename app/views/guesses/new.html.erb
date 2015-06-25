@@ -1,4 +1,4 @@
-<% %w{ a b c d e f g h i j k l m n o p q r s t u v w x y z }.each do |letter| %>
+<% @game.unguessed_letters.each do |letter| %>
   <!--  button_to letter, new_game_guess_path -->
   <%= button_to letter, game_guesses_path(game_id: @game.id, guess: { letter: letter }, method: :create) %>
 <% end %>
