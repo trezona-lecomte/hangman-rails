@@ -8,17 +8,17 @@ Hangman game features:
 
 * Start a game                              DONE
   1. Welecome user:
-    - Show the obfuscated word
-    - Show the alphabet
+    - Show the obfuscated word              DONE
+    - Show the alphabet                     DONE
     - Show numer of lives remaining
 
   2. Make a guess:
-    - If letter is not already expended:
-      - Expend guessed letter
+    - If letter is not already expended:    DONE
+      - Expend guessed letter               DONE
       - If incorrect:
         - lose a life
       - If correct:
-        - reveal matching letters
+        - reveal matching letters           DONE
 
   3. Continue making guesses until either:
     - If all hidden letters are revealed:
