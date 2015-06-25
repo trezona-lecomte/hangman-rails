@@ -1,17 +1,16 @@
 class Game < ActiveRecord::Base
   has_many :guesses, dependent: :destroy
 
-  STATES = %w{ in_progress won lost }
+  STATES = ["In Progress", "Won", "Lost"]
 
-  validates :state, inclusion: { in: STATES, message: "'%{value}' is not a valid state" }
+  validates :status, inclusion: { in: STATES, message: "'%{value}' is not a valid status" }
+  validates :hidden_word, presence: true
+  validates :username, presence: true
 
-  STATES.each do |state|
-    define_method("#{state}?") do
-      self.state == state
-    end
-
-    define_method("#{state}!") do
-      self.update_attribute(:state, state)
-    end
+  def initialize(username: "anonymous", hidden_word: "magic")
+    super
+    @username = username
+    @hidden_word = hidden_word
+    @status = "In Progress"
   end
 end

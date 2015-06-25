@@ -1,5 +1,9 @@
-<h1>All Games</h1>
+<h2>Welcome to Hangman!</h2>
 
-<ul class="games">
+<h3>Listing all the games:</h3>
+
+<ul>
   <%= render @games %>
 </ul>
+
+<%= button_to "New game", new_game_path, :method => :get %>
