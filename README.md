@@ -2,11 +2,11 @@
 
 Hangman game features:
 
-* Create a new game
+* Create a new game                         DONE
 
-* Show all created games
+* Show all created games                    DONE
 
-* Play a game
+* Start a game                              DONE
   1. Welecome user:
     - Show the obfuscated word
     - Show the alphabet
