@@ -11,7 +11,6 @@ class GuessesController < ApplicationController
     if @guess.save
       redirect_to game_url(@guess.game_id)
     else
-      byebug
       redirect_to game_url(@game)
     end
   end

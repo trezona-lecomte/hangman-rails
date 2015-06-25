@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe GamesController, type: :controller do
   let(:game1) { Game.create!(hidden_word: "magic1") }
