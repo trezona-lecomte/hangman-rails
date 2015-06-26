@@ -1,13 +1,11 @@
 require "rails_helper"
 
 RSpec.describe MakeGuess, type: :service do
-  let(:game)       { Game.create(username: Faker::Name.name, hidden_word: word, lives: 6) }
+  let(:game)       { Game.create(username: Faker::Name.name, hidden_word: "test", lives: 6) }
   let(:guess)      { game.guesses.create(letter: letter) }
   let(:make_guess) { MakeGuess.new }
 
   describe "#call" do
-    let(:word)   { "test" }
-
     context "when the guess is incorrect" do
       let(:letter) { "a" }
 
