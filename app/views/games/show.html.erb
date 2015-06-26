@@ -3,6 +3,8 @@
 
 <h3>You are trying to guess: <%= @game.obfuscated_letters("*") %></h3>
 
+<h3>You have <%= @game.lives %> lives remaining...</h3>
+
 <h3>Guesses:</h3>
 <ul>
   <%= render @game.guesses %>
