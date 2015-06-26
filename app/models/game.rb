@@ -5,14 +5,7 @@ class Game < ActiveRecord::Base
 
   ALPHABET = %w{ a b c d e f g h i j k l m n o p q r s t u v w x y z }
 
-  validates :hidden_word, presence: true
-  validates :username,    presence: true
-
-  def initialize(username: "anonymous", hidden_word: "magic")
-    super
-    @username = username
-    @hidden_word = hidden_word
-  end
+  validates :hidden_word, :username, :lives, presence: true
 
   # TODO: its starting to look like a 'word' PORO would be appropriate
   def unguessed_letters

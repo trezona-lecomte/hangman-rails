@@ -13,7 +13,8 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = Game.new(username: game_params[:username])
+    # TODO: hard-coded values need to be replaced
+    @game = Game.new(username: game_params[:username], hidden_word: Faker::Hacker.noun, lives: 6)
 
     if @game.save
       redirect_to @game

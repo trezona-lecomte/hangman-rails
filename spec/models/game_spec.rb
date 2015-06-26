@@ -2,7 +2,26 @@ require 'rails_helper'
 
 RSpec.describe Game, type: :model do
   let(:alphabet) { %w{ a b c d e f g h i j k l m n o p q r s t u v w x y z } }
-  let(:game)     { Game.new(hidden_word: "test") }
+  let(:game)     { Game.new(username: name, hidden_word: word, lives: lives) }
+  let(:name)     { Faker::Name.name }
+  let(:word)     { Faker::Hacker.noun }
+  let(:lives)    { word.length + 2 }
+
+  describe "#create" do
+    context "when a username & hidden_word are given" do
+      it "assigns the username" do
+        expect(game.username).to eq(name)
+      end
+
+      it "assigns the hidden_word" do
+        expect(game.hidden_word).to eq(word)
+      end
+
+      it "assigns the lives remaining to be the length of the hidden_word + 2" do
+        expect(game.lives).to eq(lives)
+      end
+    end
+  end
 
   describe "#unguessed_letters" do
     context "when no guesses have been made" do
@@ -24,6 +43,8 @@ RSpec.describe Game, type: :model do
   end
 
   describe "#obfuscated_letters" do
+    let(:word) { "test" }
+
     context "when no guesses have been made" do
       it "returns only mask characters" do
         expect(game.obfuscated_letters("*")).to eq(["*", "*", "*", "*"])
