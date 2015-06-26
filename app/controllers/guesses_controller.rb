@@ -9,6 +9,8 @@ class GuessesController < ApplicationController
     @guess = @game.guesses.new(guess_params)
 
     if @guess.save
+      MakeGuess.new.call(game: @game, guess: @guess)
+
       redirect_to game_url(@guess.game_id)
     else
       redirect_to game_url(@game)
