@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Game, type: :model do
   let(:alphabet) { %w{ a b c d e f g h i j k l m n o p q r s t u v w x y z } }
-  let(:game)     { Game.new(username: name, hidden_word: word, lives: lives) }
+  let(:game)     { Game.create(username: name, hidden_word: word, lives: lives) }
   let(:name)     { Faker::Name.name }
   let(:word)     { Faker::Hacker.noun }
   let(:lives)    { word.length + 2 }
@@ -52,10 +52,7 @@ RSpec.describe Game, type: :model do
     end
 
     context "when a correct guess has been made" do
-      before do
-        game.guesses.new(letter: "t")
-        game.guesses.new(letter: "e")
-      end
+      before { %w{t e}.each { |l| game.guesses.new(letter: l) } }
 
       it "reveals the letters that were guessed" do
         expect(game.obfuscated_letters("_")).to eq(["t", "e", "_", "t"])

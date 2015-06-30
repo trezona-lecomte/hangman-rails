@@ -25,15 +25,16 @@ RSpec.describe GamesController, type: :controller do
 
   describe "GET #show" do
     before do
-      games.first.guesses.create(letter: "a")
       get :show, { id: games.first.to_param }
     end
 
     it "responds with 200 OK" do
+      get :show, { id: games.first.to_param }
       expect(response).to have_http_status(200)
     end
 
     it "renders the show template" do
+      get :show, { id: games.first.to_param }
       expect(response).to render_template("show")
     end
 
@@ -42,6 +43,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it "loads all of the guesses for the game" do
+      games.first.guesses.create(letter: "a")
       expect(assigns(:guesses)).to match_array(games.first.guesses)
     end
   end

@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GuessesController, type: :controller do
-  let(:game)  { Game.create(hidden_word: "magic1", lives: 6) }
-  let(:guess) { game.guesses.create!(letter: "a", game: game) }
+  let(:game)   { Game.create(hidden_word: "magic", lives: 6) }
 
   describe "POST #create" do
     it "creates a new guess" do
