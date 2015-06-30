@@ -8,7 +8,7 @@ class Game < ActiveRecord::Base
 
   validates :hidden_word, :username, :lives, presence: true
 
-  def unguessed_letters
+  def unguessed_letters_of_alphabet
     ALPHABET.reject { |l| guesses.any? { |g| g.letter == l } }
   end
 
