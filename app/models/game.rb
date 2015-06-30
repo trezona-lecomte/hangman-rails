@@ -17,4 +17,8 @@ class Game < ActiveRecord::Base
       guesses.any? { |g| g.letter == letter } ? letter : mask_character
     end
   end
+
+  def revealed_word
+    hidden_word unless in_progress?
+  end
 end
