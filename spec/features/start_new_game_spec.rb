@@ -1,9 +1,9 @@
 require "rails_helper"
 
-feature "User starts new game" do
+feature "Start new game" do
   let(:username) { Faker::Name.name }
 
-  scenario "with a valid username" do
+  scenario "is successful with a valid username" do
     visit games_path
     click_button "New game"
 
@@ -14,7 +14,7 @@ feature "User starts new game" do
     expect(page).to have_content("In progress")
   end
 
-  scenario "with the default username" do
+  scenario "is successful with the default username" do
     visit games_path
     click_button "New game"
 
@@ -24,13 +24,13 @@ feature "User starts new game" do
     expect(page).to have_content("In progress")
   end
 
-  scenario "without a username" do
+  scenario "is unsuccessful without a username" do
     visit games_path
     click_button "New game"
 
     fill_in "Username", with: ""
     click_button "Start game"
 
-    expect(page).to have_content("In progress")
+    expect(page).to_not have_content("In progress")
   end
 end
