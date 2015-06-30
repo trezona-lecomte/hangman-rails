@@ -17,4 +17,4 @@
   <%= render @game.guesses %>
 </ul>
 
-<%= render partial: "new_guess", collection: @game.unguessed_letters, as: :letter %>
+<%= render partial: "new_guess", collection: @game.unguessed_letters_of_alphabet, as: :letter %>
