@@ -18,10 +18,10 @@ Hangman game features:
       - If incorrect: lose a life            DONE
       - If correct: reveal matching letters  DONE
 
-  3. Continue making guesses until either:
-    - If all hidden letters are revealed:
-      - Congratulate
-    - If all lives lost:
-      - Commiserate
+  3. Continue making guesses until either:   DONE
+    - If all hidden letters are revealed:    DONE
+      - Congratulate                         DONE
+    - If all lives lost:                     DONE
+      - Commiserate                          DONE
 
-  4. End game & store result
+  4. End game & store result                 DONE
