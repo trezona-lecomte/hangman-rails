@@ -1,46 +1,60 @@
 require "rails_helper"
 
 RSpec.describe Game, type: :model do
-  let(:alphabet) { %w{ a b c d e f g h i j k l m n o p q r s t u v w x y z } }
-  let(:game)     { Game.create(username: name, hidden_word: word, lives: lives) }
+  let(:game)     { Game.create(username: name, hidden_word: "test", lives: 6) }
   let(:name)     { Faker::Name.name }
-  let(:word)     { Faker::Hacker.noun }
-  let(:lives)    { word.length + 2 }
+  let(:alphabet) { ("a".."z").to_a }
 
-  describe "#unguessed_letters" do
+  describe "#unguessed_letters_of_alphabet" do
+    subject { game.unguessed_letters_of_alphabet }
+
     context "when no guesses have been made" do
-      it "returns the full alphabet" do
-        expect(game.unguessed_letters).to eq(alphabet)
-      end
+      it { is_expected.to eq(alphabet) }
     end
 
     context "when a guess has been made" do
-      %w{a j z}.each do |letter|
-        let(:guessed_letter) { letter }
-        before { game.guesses.new(letter: guessed_letter) }
+      before { game.guesses.create(letter: letter) }
+      let(:letter) { "j" }
 
-        it "doesn't return '#{letter}' when it has been guessed" do
-          expect(game.unguessed_letters).to eq(alphabet.reject { |l| l == guessed_letter })
-        end
-      end
+      it { is_expected.to_not include(letter) }
     end
   end
 
   describe "#obfuscated_letters" do
-    let(:word) { "test" }
+    subject { game.obfuscated_letters("*") }
 
     context "when no guesses have been made" do
-      it "returns only mask characters" do
-        expect(game.obfuscated_letters("*")).to eq(["*", "*", "*", "*"])
-      end
+      it { is_expected.to eq(%w{* * * *}) }
     end
 
-    context "when a correct guess has been made" do
+    context "when correct guesses have been made" do
       before { %w{t e}.each { |l| game.guesses.new(letter: l) } }
 
-      it "reveals the letters that were guessed" do
-        expect(game.obfuscated_letters("_")).to eq(["t", "e", "_", "t"])
-      end
+      it { is_expected.to eq(%w{t e * t})}
     end
   end
+
+  describe "#revealed_word" do
+    before  { game.update!(status: status) }
+    subject { game.revealed_word }
+
+    context "when the game is won" do
+      let(:status) { "won" }
+
+      it { is_expected.to eq("test") }
+    end
+
+    context "when the game is lost" do
+      let(:status) { "lost" }
+
+      it { is_expected.to eq("test") }
+    end
+
+    context "when the game is still in progress" do
+      let(:status) { "in_progress" }
+
+      it { is_expected.to be_nil }
+    end
+  end
+
 end
