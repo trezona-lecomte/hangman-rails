@@ -48,7 +48,7 @@ RSpec.describe MakeGuess, type: :service do
       end
 
       context "when all letters have been guessed" do
-        before { %w{ e s }.each { |l| game.guesses.new(letter: l) } }
+        before { %w{ e s }.each { |l| game.guesses.create(letter: l) } }
 
         it "changes the status from in_progress to won" do
           expect{ make_guess.call("t") }.to change(game, :status).from("in_progress").to("won")

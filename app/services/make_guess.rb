@@ -4,22 +4,39 @@ class MakeGuess
   end
 
   def call(letter)
-    if @game.status == "in_progress"
-      guess = @game.guesses.new(letter: letter)
+    @game.with_lock do
+      if @game.status == "in_progress"
+        guess = @game.guesses.new(letter: letter)
 
-      if @game.hidden_word.include?(guess.letter)
-        if_guessed_already = @game.guesses.map(&:letter).method(:include?)
+        guess.save
 
-        letters_still_hidden = @game.hidden_word.chars.reject &if_guessed_already
-
-        @game.update(status: "won") if letters_still_hidden.empty?
-      else
-        @game.decrement!(:lives) if @game.lives > 0
-
-        @game.update(status: "lost") if @game.lives == 0
+        update_game_status(guess)
       end
-
-      guess.save
     end
+
   end
+
+  private
+    def update_game_status(guess)
+      if @game.hidden_word.include?(guess.letter)
+        @game.update(status: "won") if word_guessed?
+      else
+        @game.decrement!(:lives) unless all_lives_lost?
+
+        @game.update(status: "lost") if all_lives_lost?
+      end
+    end
+
+    def word_guessed?
+      if_guessed_already = @game.guesses.map(&:letter).method(:include?)
+
+      letters_still_hidden = @game.hidden_word.chars.reject &if_guessed_already
+
+      letters_still_hidden.empty?
+    end
+
+    def all_lives_lost?
+      @game.lives < 1
+    end
+
 end
