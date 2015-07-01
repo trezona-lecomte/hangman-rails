@@ -6,22 +6,24 @@ RSpec.describe Game, type: :model do
   let(:alphabet) { ("a".."z").to_a }
 
   describe "#unguessed_letters_of_alphabet" do
+    before  { guesses.each { |l| game.guesses.create(letter: l) } }
     subject { game.unguessed_letters_of_alphabet }
 
     context "when no guesses have been made" do
+      let(:guesses) { [] }
+
       it { is_expected.to eq(alphabet) }
     end
 
     context "when a guess has been made" do
-      before { game.guesses.create(letter: letter) }
-      let(:letter) { "j" }
+      let(:guesses) { ["j"] }
 
-      it { is_expected.to_not include(letter) }
+      it { is_expected.to_not include("j") }
     end
   end
 
   describe "#obfuscated_letters" do
-    before  { guesses.each { |l| game.guesses.new(letter: l) } }
+    before  { guesses.each { |l| game.guesses.create(letter: l) } }
     subject { game.obfuscated_letters("*") }
 
     context "when no guesses have been made" do
