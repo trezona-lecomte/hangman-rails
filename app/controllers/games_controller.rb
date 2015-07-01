@@ -5,7 +5,6 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @guesses = @game.guesses
   end
 
   def new
@@ -18,7 +17,7 @@ class GamesController < ApplicationController
     if @game.save
       redirect_to @game
     else
-      redirect_to games_path
+      redirect_to games_path, alert: "Sorry, we were unable to start that game. Please try again."
     end
   end
 

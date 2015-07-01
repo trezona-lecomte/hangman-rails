@@ -4,7 +4,7 @@ class GuessesController < ApplicationController
 
     MakeGuess.new(@game).call(guess_params[:letter])
 
-    redirect_to game_url(@game)
+    redirect_to @game
   end
 
   private

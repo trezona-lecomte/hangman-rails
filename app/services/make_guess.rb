@@ -13,7 +13,6 @@ class MakeGuess
         update_game_status(guess)
       end
     end
-
   end
 
   private
@@ -38,5 +37,4 @@ class MakeGuess
     def all_lives_lost?
       @game.lives < 1
     end
-
 end
