@@ -21,16 +21,31 @@ RSpec.describe Game, type: :model do
   end
 
   describe "#obfuscated_letters" do
+    before  { guesses.each { |l| game.guesses.new(letter: l) } }
     subject { game.obfuscated_letters("*") }
 
     context "when no guesses have been made" do
+      let(:guesses) { [] }
+
       it { is_expected.to eq(%w{* * * *}) }
     end
 
     context "when correct guesses have been made" do
-      before { %w{t e}.each { |l| game.guesses.new(letter: l) } }
+      let(:guesses) { %w{t e} }
 
       it { is_expected.to eq(%w{t e * t})}
+    end
+
+    context "when only incorrect guesses have been made" do
+      let(:guesses) { %w{x y z} }
+
+      it { is_expected.to eq(%w{* * * *}) }
+    end
+
+    context "when correct and incorrect guesses have been made" do
+      let(:guesses) { %w{t j a z} }
+
+      it { is_expected.to eq(%w{t * * t}) }
     end
   end
 

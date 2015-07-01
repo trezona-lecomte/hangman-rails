@@ -8,25 +8,31 @@ RSpec.describe MakeGuess, type: :service do
   describe "#call" do
     context "when the guess is incorrect" do
       let(:letter) { "a" }
+      subject { make_guess.call(letter) }
 
       context "when the game has at least 1 life left" do
-        it "decrements lives" do
-          expect{ make_guess.call(letter) }.to change(game, :lives).by(-1)
-        end
-
-        context "when the game is updated to have 0 lives" do
-          before { game.update(lives: 1) }
-
-          it "changes the status from in_progress to lost" do
-            expect{ make_guess.call(letter) }.to change(game, :status).from("in_progress").to("lost")
-          end
-        end
 
         context "when the game is updated to have at least 1 life" do
           before { game.update(lives: 2) }
 
+          it "decrements lives" do
+            expect{ make_guess.call(letter) }.to change(game, :lives).by(-1)
+          end
+
           it "doesn't change the status" do
             expect{ make_guess.call(letter) }.to_not change(game, :status)
+          end
+        end
+
+        context "when the game is updated from 1 to 0 lives" do
+          before { game.update(lives: 1) }
+
+          it "decrements lives" do
+            expect{ make_guess.call(letter) }.to change(game, :lives).by(-1)
+          end
+
+          it "changes the status from in_progress to lost" do
+            expect{ make_guess.call(letter) }.to change(game, :status).from("in_progress").to("lost")
           end
         end
       end
@@ -48,7 +54,7 @@ RSpec.describe MakeGuess, type: :service do
       end
 
       context "when all letters have been guessed" do
-        before { %w{ e s }.each { |l| game.guesses.create(letter: l) } }
+        before { %w{e s}.each { |l| game.guesses.create(letter: l) } }
 
         it "changes the status from in_progress to won" do
           expect{ make_guess.call("t") }.to change(game, :status).from("in_progress").to("won")

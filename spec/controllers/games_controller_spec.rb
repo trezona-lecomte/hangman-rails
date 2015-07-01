@@ -40,10 +40,6 @@ RSpec.describe GamesController, type: :controller do
     it "loads the requested game" do
       expect(assigns(:game)).to eq(games.first)
     end
-
-    it "loads all of the guesses for the game" do
-      expect(assigns(:guesses)).to match_array(games.first.guesses)
-    end
   end
 
   describe "GET #new" do
@@ -63,18 +59,14 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe "POST #create" do
-    before { post :create, game: { username: Faker::Name.name,
-                                   hidden_word: Faker::Hacker.noun,
-                                   lives: lives } }
+    before { post :create, game: { username: name, hidden_word: word, lives: lives } }
 
     it "responds with 302 Redirect" do
       expect(response).to have_http_status(302)
     end
 
     it "creates a new game" do
-      expect{ post :create, game: { username: Faker::Name.name,
-                                    hidden_word: Faker::Hacker.noun,
-                                    lives: lives } }.to change(Game, :count).by(1)
+      expect{ post :create, game: { username: name, hidden_word: word, lives: lives } }.to change(Game, :count).by(1)
     end
   end
 end
