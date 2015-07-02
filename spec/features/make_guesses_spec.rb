@@ -13,20 +13,6 @@ feature "Make guesses" do
     expect(page).to_not have_button("a")
   end
 
-  scenario "making a guess doesn't remove their button when the game isn't in progress" do
-    unlikely_letters = %w{z x y q w v}
-    start_game
-
-    unlikely_letters.each do |l|
-      click_button l
-      expect(page).to_not have_button(l)
-    end
-
-    click_button "a"
-
-    expect(page).to have_button("a")
-  end
-
   def start_game
     visit games_path
     click_button "New game"

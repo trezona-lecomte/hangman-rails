@@ -1,14 +1,14 @@
 require "rails_helper"
 
-RSpec.describe MakeGuess, type: :service do
+RSpec.describe SubmitGuess, type: :service do
   let(:game)       { Game.create(username: Faker::Name.name, hidden_word: word, lives: 6) }
   let(:word)       { "test" }
-  let(:make_guess) { MakeGuess.new(game) }
+  let(:submit_guess) { SubmitGuess.new(game) }
 
   describe "#call" do
     context "when the guess is incorrect" do
       let(:letter) { "a" }
-      subject { make_guess.call(letter) }
+      subject { submit_guess.call(letter) }
 
       context "when the game has at least 1 life left" do
 
@@ -16,23 +16,23 @@ RSpec.describe MakeGuess, type: :service do
           before { game.update(lives: 2) }
 
           it "decrements lives" do
-            expect{ make_guess.call(letter) }.to change(game, :lives).by(-1)
+            expect{ submit_guess.call(letter) }.to change(game, :lives).by(-1)
           end
 
           it "doesn't change the status" do
-            expect{ make_guess.call(letter) }.to_not change(game, :status)
+            expect{ submit_guess.call(letter) }.to_not change(game, :status)
           end
         end
 
         context "when the game is updated from 1 to 0 lives" do
-          before { game.update(lives: 1) }
+          before(:each) { game.update(lives: 1) }
 
           it "decrements lives" do
-            expect{ make_guess.call(letter) }.to change(game, :lives).by(-1)
+            expect{ submit_guess.call(letter) }.to change(game, :lives).by(-1)
           end
 
           it "changes the status from in_progress to lost" do
-            expect{ make_guess.call(letter) }.to change(game, :status).from("in_progress").to("lost")
+            expect{ submit_guess.call(letter) }.to change(game, :status).from("in_progress").to("lost")
           end
         end
       end
@@ -41,7 +41,7 @@ RSpec.describe MakeGuess, type: :service do
         before { game.update(lives: 0) }
 
         it "doesn't decrement lives" do
-          expect{ make_guess.call(letter) }.to_not change(game, :lives)
+          expect{ submit_guess.call(letter) }.to_not change(game, :lives)
         end
       end
     end
@@ -50,20 +50,20 @@ RSpec.describe MakeGuess, type: :service do
       let(:letter) { "e" }
 
       it "doesn't decrement lives" do
-        expect{ make_guess.call(letter) }.to_not change(game, :lives)
+        expect{ submit_guess.call(letter) }.to_not change(game, :lives)
       end
 
       context "when all letters have been guessed" do
         before { %w{e s}.each { |l| game.guesses.create(letter: l) } }
 
         it "changes the status from in_progress to won" do
-          expect{ make_guess.call("t") }.to change(game, :status).from("in_progress").to("won")
+          expect{ submit_guess.call("t") }.to change(game, :status).from("in_progress").to("won")
         end
       end
 
       context "when not all of the letters have been guessed" do
         it "doesn't update the game status" do
-          expect{ make_guess.call(letter) }.to_not change(game, :status)
+          expect{ submit_guess.call(letter) }.to_not change(game, :status)
         end
       end
     end
@@ -75,7 +75,7 @@ RSpec.describe MakeGuess, type: :service do
         before { game.update(status: "won") }
 
         it "doesn't add further guesses" do
-          expect{ make_guess.call(letter) }.to_not change{ game.guesses.count }
+          expect{ submit_guess.call(letter) }.to_not change{ game.guesses.count }
         end
       end
 
@@ -83,7 +83,7 @@ RSpec.describe MakeGuess, type: :service do
         before { game.update(status: "lost") }
 
         it "doesn't add further guesses" do
-          expect{ make_guess.call(letter) }.to_not change{ game.guesses.count }
+          expect{ submit_guess.call(letter) }.to_not change{ game.guesses.count }
         end
       end
     end
