@@ -5,7 +5,7 @@ RSpec.describe GamePresenter, type: :presenter do
   let(:presenter) { GamePresenter.new(game, "view") }
 
   describe "#masked_letters" do
-    let(:masks) { %w{* & %} }
+    let(:masks) { %w{* & % _} }
 
     context "when the hidden_word is fully masked" do
       it "returns an array of masked letters" do
