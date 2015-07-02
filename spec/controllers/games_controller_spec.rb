@@ -1,22 +1,17 @@
 require "rails_helper"
 
 RSpec.describe GamesController, type: :controller do
-  let(:name)   { Faker::Name.name }
-  let(:word)   { Faker::Hacker.noun }
-  let(:lives)  { 6 }
-  let(:games)  { [Game.create(username: name, hidden_word: word, lives: lives),
-                  Game.create(username: name, hidden_word: word, lives: lives)] }
+  let(:name)  { Faker::Name.name }
+  let(:games) { [Game.create(username: name, hidden_word: "test", lives: 6),
+                 Game.create(username: name, hidden_word: "test", lives: 6)] }
 
   describe "GET #index" do
-    before { get :index }
+    before  { get :index }
+    subject { response }
 
-    it "responds with 200 OK" do
-      expect(response).to have_http_status(200)
-    end
+    it { is_expected.to have_http_status(200) }
 
-    it "renders the index template" do
-      expect(response).to render_template("index")
-    end
+    it { is_expected.to render_template("index") }
 
     it "loads all of the games" do
       expect(assigns(:games)).to match_array(games)
@@ -28,14 +23,11 @@ RSpec.describe GamesController, type: :controller do
       get :show, { id: games.first.to_param }
       games.first.guesses.create(letter: "a")
     end
+    subject { response }
 
-    it "responds with 200 OK" do
-      expect(response).to have_http_status(200)
-    end
+    it { is_expected.to have_http_status(200) }
 
-    it "renders the show template" do
-      expect(response).to render_template("show")
-    end
+    it { is_expected.to render_template("show") }
 
     it "loads the requested game" do
       expect(assigns(:game)).to eq(games.first)
@@ -43,15 +35,12 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe "GET #new" do
-    before { get :new }
+    before  { get :new }
+    subject { response }
 
-    it "responds with 200 OK" do
-      expect(response).to have_http_status(200)
-    end
+    it { is_expected.to have_http_status(200) }
 
-    it "renders the new template" do
-      expect(response).to render_template("new")
-    end
+    it { is_expected.to render_template("new") }
 
     it "loads a new game" do
       expect(assigns(:game)).to be_a_new(Game)
@@ -59,14 +48,21 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe "POST #create" do
-    before { post :create, game: { username: name, hidden_word: word, lives: lives } }
+    before  { post :create, game: { username: name } }
+    subject { response }
 
-    it "responds with 302 Redirect" do
-      expect(response).to have_http_status(302)
+    context "when the game is created successfully" do
+      it { is_expected.to have_http_status(302) }
+
+      it "creates a new game" do
+        expect{ post :create, game: { username: name} }.to change(Game, :count).by(1)
+      end
     end
 
-    it "creates a new game" do
-      expect{ post :create, game: { username: name, hidden_word: word, lives: lives } }.to change(Game, :count).by(1)
+    context "when the game isn't created" do
+      let(:name) { "" }
+
+      it { is_expected.to render_template("new") }
     end
   end
 end
