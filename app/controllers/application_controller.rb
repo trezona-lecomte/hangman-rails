@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
 
   protected
     def go_to_root
-      #TODO: show errors
       redirect_to root
     end
 end
