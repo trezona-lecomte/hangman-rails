@@ -27,7 +27,7 @@ class Game < ActiveRecord::Base
     else
       decrement!(:lives) if lives > 0
 
-      lost! if lives == 0
+      lost! if lives < 1
     end
   end
 
