@@ -18,4 +18,5 @@ group :development, :test do
   gem 'pry-nav',     '0.2.4'
   gem 'faker',       '1.4.3'
   gem 'capybara',    '2.4.4'
+  gem 'simplecov',   '0.10.0'
 end
