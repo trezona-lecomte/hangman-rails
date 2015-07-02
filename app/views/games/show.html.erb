@@ -12,4 +12,8 @@
   <% if game.in_progress? %>
     <%= render partial: "new_guess", collection: game.unguessed_letters_of_alphabet, as: :letter %>
   <% end %>
+
+  <br>
+
+  <%= button_to "Back to games list", games_path, method: :get %>
 <% end %>
