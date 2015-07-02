@@ -13,13 +13,9 @@ class Game < ActiveRecord::Base
     ALPHABET.reject { |l| guesses.any? { |g| g.letter == l } }
   end
 
-  def obfuscated_letters(mask_character)
-    hidden_word.chars.map do |hidden_letter|
-      if correctly_guessed_letters.include?(hidden_letter)
-        hidden_letter
-      else
-        mask_character
-      end
+  def revealed_letters
+    hidden_word.chars.map do |letter|
+      correctly_guessed_letters.include?(letter) ? letter : nil
     end
   end
 

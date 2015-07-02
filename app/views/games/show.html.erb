@@ -1,13 +1,15 @@
-<h2>Game: <%= @game.status.humanize %></h2>
-<p>User: <%= @game.username %></p>
+<% present(@game) do |game| %>
+  <h2>Game: <%= game.status.humanize %></h2>
+  <p>User: <%= game.username %></p>
 
-<%= display_status(@game) %>
+  <%= display_status(game) %>
 
-<h3>Guesses:</h3>
-<ul>
-  <%= render @game.guesses %>
-</ul>
+  <h3>Guesses:</h3>
+  <ul>
+    <%= render game.guesses %>
+  </ul>
 
-<% if @game.in_progress? %>
-  <%= render partial: "new_guess", collection: @game.unguessed_letters_of_alphabet, as: :letter %>
+  <% if game.in_progress? %>
+    <%= render partial: "new_guess", collection: game.unguessed_letters_of_alphabet, as: :letter %>
+  <% end %>
 <% end %>

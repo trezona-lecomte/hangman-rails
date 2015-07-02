@@ -22,32 +22,32 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe "#obfuscated_letters" do
+  describe "#revealed_letters" do
     before  { guesses.each { |letter| game.guesses.create(letter: letter) } }
-    subject { game.obfuscated_letters("*") }
+    subject { game.revealed_letters }
 
     context "when no guesses have been made" do
       let(:guesses) { [] }
 
-      it { is_expected.to eq(%w{* * * *}) }
+      it { is_expected.to eq([nil, nil, nil, nil]) }
     end
 
     context "when correct guesses have been made" do
       let(:guesses) { %w{e t} }
 
-      it { is_expected.to eq(%w{t e * t})}
+      it { is_expected.to eq(["t", "e", nil, "t"])}
     end
 
     context "when only incorrect guesses have been made" do
       let(:guesses) { %w{x y z} }
 
-      it { is_expected.to eq(%w{* * * *}) }
+      it { is_expected.to eq([nil, nil, nil, nil]) }
     end
 
     context "when correct and incorrect guesses have been made" do
       let(:guesses) { %w{j t a z} }
 
-      it { is_expected.to eq(%w{t * * t}) }
+      it { is_expected.to eq(["t", nil, nil, "t"]) }
     end
   end
 

@@ -1,2 +1,4 @@
-<p><%= "You are trying to guess: #{@game.obfuscated_letters('*')}" %></p>
-<p><%= "You have #{@game.lives} lives remaining..." %></p>
+<% present(@game) do |game| %>
+  <p><%= "You are trying to guess: #{game.masked_letters('*')}" %></p>
+  <p><%= "You have #{game.lives} lives remaining..." %></p>
+<% end %>
