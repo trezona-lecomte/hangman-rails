@@ -1,90 +1,42 @@
 require "rails_helper"
 
 RSpec.describe SubmitGuess, type: :service do
-  let(:game)       { Game.create(username: Faker::Name.name, hidden_word: word, lives: 6) }
-  let(:word)       { "test" }
+  let(:game)         { Game.create(username: Faker::Name.name, hidden_word: word, lives: 6) }
+  let(:word)         { "test" }
   let(:submit_guess) { SubmitGuess.new(game) }
 
   describe "#call" do
-    context "when the guess is incorrect" do
-      let(:letter) { "a" }
-      subject { submit_guess.call(letter) }
+    subject { lambda { submit_guess.call(letter) } }
 
-      context "when the game has at least 1 life left" do
+    context "when the game is in progress" do
+      before { allow(game).to receive(:in_progress?).and_return true }
 
-        context "when the game is updated to have at least 1 life" do
-          before { game.update(lives: 2) }
+      context "when guessed letter is valid" do
+        let(:letter) { "a" }
 
-          it "decrements lives" do
-            expect{ submit_guess.call(letter) }.to change(game, :lives).by(-1)
-          end
-
-          it "doesn't change the status" do
-            expect{ submit_guess.call(letter) }.to_not change(game, :status)
-          end
-        end
-
-        context "when the game is updated from 1 to 0 lives" do
-          before(:each) { game.update(lives: 1) }
-
-          it "decrements lives" do
-            expect{ submit_guess.call(letter) }.to change(game, :lives).by(-1)
-          end
-
-          it "changes the status from in_progress to lost" do
-            expect{ submit_guess.call(letter) }.to change(game, :status).from("in_progress").to("lost")
-          end
-        end
+        it { is_expected.to change{ game.guesses.count } }
       end
 
-      context "when the game has no lives left" do
-        before { game.update(lives: 0) }
+      context "when the guessed letter is invalid" do
+        let(:letter) { "%" }
 
-        it "doesn't decrement lives" do
-          expect{ submit_guess.call(letter) }.to_not change(game, :lives)
-        end
+        it { is_expected.to raise_error(ActiveRecord::RecordInvalid) }
       end
     end
 
-    context "when the guess is correct" do
-      let(:letter) { "e" }
+    context "when the game isn't in progress" do
+      before { allow(game).to receive(:in_progress?).and_return false }
 
-      it "doesn't decrement lives" do
-        expect{ submit_guess.call(letter) }.to_not change(game, :lives)
+      context "when guessed letter is valid" do
+        let(:letter) { "e" }
+
+        it { is_expected.to_not change{ game.guesses.count } }
       end
 
-      context "when all letters have been guessed" do
-        before { %w{e s}.each { |l| game.guesses.create(letter: l) } }
+      context "when the guessed letter is invalid" do
+        let(:letter) { "*" }
 
-        it "changes the status from in_progress to won" do
-          expect{ submit_guess.call("t") }.to change(game, :status).from("in_progress").to("won")
-        end
-      end
-
-      context "when not all of the letters have been guessed" do
-        it "doesn't update the game status" do
-          expect{ submit_guess.call(letter) }.to_not change(game, :status)
-        end
-      end
-    end
-
-    context "when the game isn't 'in_progress'" do
-      let(:letter) { "e" }
-
-      context "when the game is won" do
-        before { game.update(status: "won") }
-
-        it "doesn't add further guesses" do
-          expect{ submit_guess.call(letter) }.to_not change{ game.guesses.count }
-        end
-      end
-
-      context "when the game is lost" do
-        before { game.update(status: "lost") }
-
-        it "doesn't add further guesses" do
-          expect{ submit_guess.call(letter) }.to_not change{ game.guesses.count }
-        end
+        it { is_expected.to_not change{ game.guesses.count } }
       end
     end
   end

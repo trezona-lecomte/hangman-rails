@@ -4,6 +4,7 @@ class GuessesController < ApplicationController
 
     begin
       SubmitGuess.new(@game).call(guess_params[:letter])
+
       redirect_to @game
     rescue
       redirect_to @game, alert: "Sorry, that guess can't be submitted."
