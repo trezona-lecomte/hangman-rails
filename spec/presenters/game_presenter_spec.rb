@@ -10,7 +10,7 @@ RSpec.describe GamePresenter, type: :presenter do
     context "when the hidden_word is fully masked" do
       it "returns an array of masked letters" do
         masks.each do |mask|
-            expect(presenter.masked_letters(mask)).to eq([mask, mask, mask, mask])
+            expect(presenter.masked_letters(mask)).to eq("#{mask} #{mask} #{mask} #{mask}")
         end
       end
     end
@@ -20,7 +20,7 @@ RSpec.describe GamePresenter, type: :presenter do
 
       it "return an array of partially masked letters" do
         masks.each do |mask|
-            expect(presenter.masked_letters(mask)).to eq(["t", mask, mask, "t"])
+            expect(presenter.masked_letters(mask)).to eq("t #{mask} #{mask} t")
         end
       end
     end
