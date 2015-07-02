@@ -1,6 +1,10 @@
 <h1>Let's play some Hangman!</h1>
 
 <%= form_for(@game) do |f| %>
-  <%= render "fields", f: f %>
+  <%= render "shared/error_messages", object: f.object %>
+
+  <%= f.label :username %>
+  <%= f.text_field :username, class: "form-control" %>
+
   <%= f.submit "Start game" %>
 <% end %>

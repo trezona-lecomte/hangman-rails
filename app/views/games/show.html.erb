@@ -1,20 +1,13 @@
 <h2>Game: <%= @game.status.humanize %></h2>
 <p>User: <%= @game.username %></p>
 
-<% if @game.won? %>
-  <p><%= "Congratulations! You guessed the word." %></p>
-  <p><%= "You correctly guessed: '#{@game.revealed_word}'" %></p>
-<% elsif @game.lost? %>
-  <p><%= "Oh no, you hanged the man!" %></p>
-  <p><%= "The word you were trying to guess was: '#{@game.revealed_word}'" %></p>
-<% else %>
-  <p><%= "You are trying to guess: #{@game.obfuscated_letters('*')}" %></p>
-  <p><%= "You have #{@game.lives} lives remaining..." %></p>
-<% end %>
+<%= display_status(@game) %>
 
 <h3>Guesses:</h3>
 <ul>
   <%= render @game.guesses %>
 </ul>
 
-<%= render partial: "new_guess", collection: @game.unguessed_letters_of_alphabet, as: :letter %>
+<% if @game.in_progress? %>
+  <%= render partial: "new_guess", collection: @game.unguessed_letters_of_alphabet, as: :letter %>
+<% end %>
