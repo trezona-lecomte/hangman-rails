@@ -1,8 +1,7 @@
 class Game < ActiveRecord::Base
   ALPHABET = ("a".."z").to_a
 
-  has_many :guesses,
-            dependent: :destroy
+  has_many :guesses, dependent: :destroy
 
   validates :hidden_word, :username, :lives, presence: true
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -22,7 +21,6 @@ class Game < ActiveRecord::Base
   def lives_remaining
     lives + correctly_guessed_letters.count - guesses.count
   end
-
 
   def update_status!
     won! if word_guessed?
