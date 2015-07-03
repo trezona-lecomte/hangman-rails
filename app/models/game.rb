@@ -2,10 +2,10 @@ class Game < ActiveRecord::Base
   ALPHABET = ("a".."z").to_a
 
   has_many :guesses,
-            dependent: :destroy,
-            after_add: :update_status!
+            dependent: :destroy
 
   validates :hidden_word, :username, :lives, presence: true
+  validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   enum status: [:in_progress, :won, :lost]
 
@@ -19,17 +19,18 @@ class Game < ActiveRecord::Base
     end
   end
 
-  private
-
-  def update_status!(guess)
-    if hidden_word.include?(guess.letter)
-      won! if word_guessed?
-    else
-      decrement!(:lives) if lives > 0
-
-      lost! if lives < 1
-    end
+  def lives_remaining
+    lives + correctly_guessed_letters.count - guesses.count
   end
+
+
+  def update_status!
+    won! if word_guessed?
+
+    lost! if lives_remaining <= 0
+  end
+
+  private
 
   def correctly_guessed_letters
     hidden_word.chars & guesses.map(&:letter)
