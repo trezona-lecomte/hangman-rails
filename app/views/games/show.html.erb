@@ -1,4 +1,6 @@
 <% present(@game) do |game| %>
+  <%= render "shared/error_messages", object: game %>
+
   <h2>Game: <%= game.status.humanize %></h2>
   <p>User: <%= game.username %></p>
 
@@ -9,8 +11,8 @@
     <%= render game.guesses %>
   </ul>
 
-  <% if game.in_progress? %>
-    <%= render partial: "new_guess", collection: game.unguessed_letters_of_alphabet, as: :letter %>
+  <% if @game.in_progress? %>
+    <%= render partial: "games/new_guess", collection: game.unguessed_letters_of_alphabet, as: :letter %>
   <% end %>
 
   <br>
