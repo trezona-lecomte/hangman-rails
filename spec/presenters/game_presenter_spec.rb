@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe GamePresenter, type: :presenter do
-  let(:game)      { Game.create(username: "name", hidden_word: "test", lives: 6) }
+  let(:game)      { Game.create(username: "name", hidden_word: "test", starting_lives: 6) }
   let(:presenter) { GamePresenter.new(game, "view") }
 
   describe "#masked_letters" do

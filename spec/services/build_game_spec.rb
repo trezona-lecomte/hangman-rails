@@ -21,7 +21,7 @@ RSpec.describe BuildGame, type: :service do
       end
 
       it "returns a game with lives" do
-        expect(built_game.lives).to_not be_nil
+        expect(built_game.starting_lives).to_not be_nil
       end
     end
 

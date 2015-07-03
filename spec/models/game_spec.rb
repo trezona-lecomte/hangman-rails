@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Game, type: :model do
-  let(:game)     { Game.create(username: name, hidden_word: "test", lives: 6) }
+  let(:game)     { Game.create(username: name, hidden_word: "test", starting_lives: 6) }
   let(:name)     { Faker::Name.name }
   let(:alphabet) { ("a".."z").to_a }
 
@@ -93,25 +93,25 @@ RSpec.describe Game, type: :model do
     context "when there are no guesses" do
       let(:prior_guesses) { [] }
 
-      it { is_expected.to eq(game.lives) }
+      it { is_expected.to eq(game.starting_lives) }
     end
 
     context "when 6 incorrect guesses have been made" do
       let(:prior_guesses) { %w{z y x r q v} }
 
-      it { is_expected.to eq(game.lives - 6) }
+      it { is_expected.to eq(game.starting_lives - 6) }
     end
 
     context "when 3 incorrect guesses and 2 correct guesses have been made" do
       let(:prior_guesses) { %w{z y x t e} }
 
-      it { is_expected.to eq(game.lives - 3) }
+      it { is_expected.to eq(game.starting_lives - 3) }
     end
 
     context "when 5 incorrect guesses and 3 correct guesses have been made" do
       let(:prior_guesses) { %w{z y x r q t e s} }
 
-      it { is_expected.to eq(game.lives - 5) }
+      it { is_expected.to eq(game.starting_lives - 5) }
     end
   end
 end

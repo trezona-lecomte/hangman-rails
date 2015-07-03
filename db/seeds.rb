@@ -6,5 +6,5 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 10.times do
-  Game.create!(username: Faker::Name.name, hidden_word: Faker::Hacker.noun, lives: 6)
+  Game.create!(username: Faker::Name.name, hidden_word: Faker::Hacker.noun, starting_lives: 6)
 end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe SubmitGuess, type: :service do
-  let(:game)         { Game.create(username: Faker::Name.name, hidden_word: word, lives: 6) }
+  let(:game)         { Game.create(username: Faker::Name.name, hidden_word: word, starting_lives: 6) }
   let(:word)         { "test" }
   let(:submit_guess) { SubmitGuess.new(game) }
 

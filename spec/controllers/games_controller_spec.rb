@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe GamesController, type: :controller do
   let(:name)  { Faker::Name.name }
-  let(:games) { [Game.create(username: name, hidden_word: "test", lives: 6),
-                 Game.create(username: name, hidden_word: "test", lives: 6)] }
+  let(:games) { [Game.create(username: name, hidden_word: "test", starting_lives: 6),
+                 Game.create(username: name, hidden_word: "test", starting_lives: 6)] }
 
   describe "GET #index" do
     before  { get :index }

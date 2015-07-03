@@ -3,8 +3,8 @@ class Game < ActiveRecord::Base
 
   has_many :guesses, dependent: :destroy
 
-  validates :hidden_word, :username, :lives, presence: true
-  validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :hidden_word, :username, :starting_lives, presence: true
+  validates :starting_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   enum status: [:in_progress, :won, :lost]
 
@@ -19,7 +19,7 @@ class Game < ActiveRecord::Base
   end
 
   def lives_remaining
-    lives + correctly_guessed_letters.count - guesses.count
+    starting_lives + correctly_guessed_letters.count - guesses.count
   end
 
   def update_status!
