@@ -51,52 +51,67 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe "#adding guesses" do
+  describe "#update_status!" do
     before  { prior_guesses.each { |l| game.guesses.create(letter: l) } }
-    subject { lambda { game.guesses.create(letter: guessed_letter) } }
+    subject { lambda { game.update_status! } }
 
-    context "when the last guess was correct" do
-      context "when the word has been guessed" do
-        let(:prior_guesses) { %w{t e}}
-        let(:guessed_letter)  { "s" }
+    context "when the word has been guessed" do
+      let(:prior_guesses) { %w{t e s}}
 
-        it { is_expected.to_not change{game.lives} }
-        it { is_expected.to change{game.status}.from("in_progress").to("won") }
-      end
-
-      context "when the word hasn't yet been guessed" do
-        let(:prior_guesses) { %w{t} }
-        let(:guessed_letter)  { "e" }
-
-        it { is_expected.to_not change{game.lives} }
-        it { is_expected.to_not change{game.status} }
-      end
+      it { is_expected.to change{game.status}.from("in_progress").to("won") }
     end
 
-    context "when the last guess was incorrect" do
-      context "when there are still lives left after this guess" do
-        let(:prior_guesses) { %w{t e} }
-        let(:guessed_letter)  { "z" }
+    context "when the word hasn't yet been guessed and there are lives remaining" do
+      let(:prior_guesses) { %w{t e} }
 
-        it { is_expected.to change{game.lives}.by(-1) }
-        it { is_expected.to_not change{game.status} }
-      end
+      it { is_expected.to_not change{game.status} }
+    end
 
-      context "when there are no lives left due to this guess" do
-        let(:prior_guesses) { %w{z y x w v} }
-        let(:guessed_letter)  { "u" }
+    context "when there are still lives remaining" do
+      let(:prior_guesses) { %w{t e z} }
 
-        it { is_expected.to change{game.lives}.by(-1) }
-        it { is_expected.to change{game.status}.from("in_progress").to("lost") }
-      end
+      it { is_expected.to_not change{game.status} }
+    end
 
-      context "when there are no lives left prior to this guess" do
-        let(:prior_guesses) { %w{z y x w v u} }
-        let(:guessed_letter)  { "r" }
+    context "when there are no lives remaining" do
+      let(:prior_guesses) { %w{z y x w v u} }
 
-        it { is_expected.to_not change{game.lives} }
-        it { is_expected.to_not change{game.status} }
-      end
+      it { is_expected.to change{game.status}.from("in_progress").to("lost") }
+    end
+
+    context "when the game is won on the last guess" do
+      let(:prior_guesses) { %w{z y x t e s} }
+
+      it { is_expected.to change{game.status}.from("in_progress").to("won") }
+    end
+  end
+
+  describe "#lives_remaining" do
+    before  { prior_guesses.each { |l| game.guesses.create(letter: l) } }
+    subject { game.lives_remaining }
+
+    context "when there are no guesses" do
+      let(:prior_guesses) { [] }
+
+      it { is_expected.to eq(game.lives) }
+    end
+
+    context "when 6 incorrect guesses have been made" do
+      let(:prior_guesses) { %w{z y x r q v} }
+
+      it { is_expected.to eq(game.lives - 6) }
+    end
+
+    context "when 3 incorrect guesses and 2 correct guesses have been made" do
+      let(:prior_guesses) { %w{z y x t e} }
+
+      it { is_expected.to eq(game.lives - 3) }
+    end
+
+    context "when 5 incorrect guesses and 3 correct guesses have been made" do
+      let(:prior_guesses) { %w{z y x r q t e s} }
+
+      it { is_expected.to eq(game.lives - 5) }
     end
   end
 end
