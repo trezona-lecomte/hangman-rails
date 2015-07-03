@@ -5,7 +5,11 @@ class SubmitGuess
 
   def call(letter)
     @game.with_lock do
-      @game.in_progress? && @game.guesses.create!(letter: letter)
+      if @game.in_progress?
+        @game.guesses.create!(letter: letter)
+
+        @game.update_status!
+      end
     end
   end
 end
